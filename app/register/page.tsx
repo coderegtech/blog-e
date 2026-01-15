@@ -2,23 +2,29 @@
 
 import { Card } from "@/components/ui/card";
 import { registerAsync } from "@/features/auth/authThunks";
-import { AppDispatch } from "@/store";
+import { AppDispatch, RootState } from "@/store";
 import { RegisterPayload } from "@/types";
 import Link from "next/dist/client/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const { isLoading } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!username || !email || !password) {
+      alert("Please fill up all fields.");
+      return;
+    }
 
     try {
       const payload: RegisterPayload = {
@@ -29,7 +35,7 @@ const RegisterPage: React.FC = () => {
 
       const res = await dispatch(registerAsync(payload));
       console.log("register: ", res);
-      if (res.type === "auth/registerAsync/rejected") {
+      if (registerAsync.rejected.match(res)) {
         alert(res.error.message || "Registration failed");
         return;
       }
@@ -80,8 +86,12 @@ const RegisterPage: React.FC = () => {
             <Link href="/login" className="text-black hover:underline">
               Already have an account?
             </Link>
-            <button type="submit" className="bg-orange-500 text-white p-2">
-              Create Account
+            <button
+              disabled={!username || !email || isLoading}
+              type="submit"
+              className="bg-orange-500 text-white p-2"
+            >
+              {isLoading ? "Processing..." : "Create Account"}
             </button>
           </form>
         </div>

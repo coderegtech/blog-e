@@ -2,11 +2,11 @@
 
 import { Card } from "@/components/ui/card";
 import { loginAsync } from "@/features/auth/authThunks";
-import { AppDispatch } from "@/store";
+import { AppDispatch, RootState } from "@/store";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -14,6 +14,7 @@ const LoginPage: React.FC = () => {
 
   const router = useRouter();
 
+  const { isLoading } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleLogin = async (e: FormEvent) => {
@@ -21,7 +22,8 @@ const LoginPage: React.FC = () => {
     try {
       const res = await dispatch(loginAsync({ email, password }));
 
-      if (res.type === "auth/loginAsync/rejected") {
+      console.log("login res: ", res);
+      if (loginAsync.rejected.match(res)) {
         alert(res.error.message || "Login failed");
         return;
       }
@@ -63,8 +65,12 @@ const LoginPage: React.FC = () => {
             <Link href="/register" className="text-black hover:underline">
               Don't have an account?
             </Link>
-            <button type="submit" className="bg-orange-500 text-white p-2">
-              Login
+            <button
+              disabled={!email || !password || isLoading}
+              type="submit"
+              className="bg-orange-500 text-white p-2"
+            >
+              {isLoading ? "Processing..." : "Login"}
             </button>
           </form>
         </div>
