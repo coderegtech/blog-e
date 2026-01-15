@@ -53,7 +53,7 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen flex justify-center items-center bg-slate-100">
-      <Card className="max-w-sm w-full min-h-96 bg-white">
+      <Card className="max-w-sm min-h-fit w-full bg-white">
         <div className="p-4 h-full space-y-10 flex flex-col">
           <h2 className="text-xl md:text-3xl text-black font-medium">
             Register Account

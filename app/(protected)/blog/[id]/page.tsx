@@ -18,8 +18,8 @@ const BlogViewPage: React.FC = () => {
   if (!selectedPost) return;
 
   return (
-    <div className="min-h-screen md:p-4 bg-slate-100 flex justify-center md:items-center relative">
-      <Card className=" max-w-md w-full bg-white overflow-hidden">
+    <div className=" md:p-4 bg-white flex justify-center md:items-center relative">
+      <Card>
         <header className="w-full flex justify-between items-center p-2 pb-4 border-b-2">
           <div className="flex items-center gap-2 ">
             <button onClick={() => router.back()}>

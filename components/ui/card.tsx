@@ -7,7 +7,11 @@ export const Card = ({
 }) => {
   return (
     <div
-      className={["border-2 border-black  relative p-4", className].join(" ")}
+      className={[
+        "border-2 border-black  relative p-4",
+        "min-h-[calc(100dvh)] sm:h-[calc(100vh)] max-w-xl w-full bg-white overflow-hidden",
+        className,
+      ].join(" ")}
       style={{
         boxShadow: "5px 5px 0px #000",
       }}

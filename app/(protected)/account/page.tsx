@@ -38,8 +38,8 @@ const AccountPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen md:p-4 bg-slate-100 flex justify-center md:items-center relative">
-      <Card className="h-[calc(100vh-100px)] max-w-md w-full bg-white overflow-hidden">
+    <div className=" md:p-4 bg-white flex justify-center md:items-center relative">
+      <Card>
         <header className="w-full flex justify-between items-center p-2 pb-4 border-b-2">
           <div className="flex items-center gap-2 ">
             <button onClick={() => router.back()}>
@@ -63,7 +63,7 @@ const AccountPage: React.FC = () => {
           <p className="text-base">{user?.email}</p>
         </div>
 
-        <div className="h-[calc(100vh-300px)] overflow-y-auto">
+        <div className="h-[calc(100vh-150px)] sm:h-[calc(100vh-50px)] overflow-y-auto">
           {/* <form
             onSubmit={() => {}}
             className="flex flex-col space-y-2 py-2 relative"
