@@ -10,7 +10,7 @@ export type Blog = {
 type Modal = {
   purpose: "delete" | "edit" | string;
   active: boolean;
-  id: string;
+  id: string | null;
 };
 
 export type BlogState = {

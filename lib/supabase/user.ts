@@ -1,7 +1,7 @@
-import { User } from "@/types";
+import { User, UserPayload } from "@/types";
 import { supabase } from ".";
 
-export const createUser = async (user: User) => {
+export const createUser = async (user: UserPayload): Promise<User> => {
   try {
     const { data, error } = await supabase
       .from("users")
@@ -16,14 +16,14 @@ export const createUser = async (user: User) => {
       throw Error(error.message);
     }
 
-    return data;
+    return data[0];
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
 
-export const getUserById = async (id: string) => {
+export const getUserById = async (id: string): Promise<User> => {
   try {
     const { data, error } = await supabase.from("users").select().eq("uid", id);
 
@@ -38,7 +38,7 @@ export const getUserById = async (id: string) => {
   }
 };
 
-export const getUserByEmail = async (email: string) => {
+export const getUserByEmail = async (email: string): Promise<User> => {
   try {
     const { data, error } = await supabase
       .from("users")

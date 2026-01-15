@@ -19,8 +19,8 @@ export const registerUser = async (auth: RegisterPayload) => {
       throw Error(error.message);
     }
 
-    if (!data) {
-      throw Error("Something went wrong!");
+    if (!data.user) {
+      throw new Error("User not authenticated");
     }
 
     await createUser({

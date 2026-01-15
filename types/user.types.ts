@@ -1,9 +1,14 @@
+export type UserPayload = {
+  uid: string;
+  username: string;
+  email: string;
+};
+
 export type User = {
   id: string;
   uid: string;
   username: string;
   email: string;
-  status?: "online" | "offline";
   created_at: string;
   updated_at: string;
 };
