@@ -35,6 +35,7 @@ const RegisterPage: React.FC = () => {
       }
 
       alert("User created successful!");
+      router.push("/login");
     } catch (error) {
       console.error("register Error: ", error);
     } finally {

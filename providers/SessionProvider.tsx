@@ -24,15 +24,13 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
 
         dispatch(setSession(session));
 
-        if (session?.user) {
-          const userId = session?.user.id as string;
-          const currentUser = await getUserById(userId);
-          dispatch(setUserId(userId));
-          dispatch(setCurrentUser(currentUser));
+        const userId = session?.user.id as string;
 
-          router.push("/blog/");
-          return;
-        }
+        if (!userId) return;
+
+        const currentUser = await getUserById(userId);
+        dispatch(setUserId(userId));
+        dispatch(setCurrentUser(currentUser));
 
         if (_event === "SIGNED_OUT") {
           // redirect back to login page
@@ -47,5 +45,5 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [dispatch, router]);
 
-  return <>{children}</>;
+  return children;
 };

@@ -28,6 +28,7 @@ const LoginPage: React.FC = () => {
       }
 
       alert("Login successful!");
+      router.push("/blog");
     } catch (error) {
       console.error("Login Error: ", error);
     } finally {
