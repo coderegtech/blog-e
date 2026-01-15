@@ -6,11 +6,8 @@ import { Blog } from "@/types";
 import { FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "./ui/modal";
-
 export const DeletePostModal = () => {
-  const { status, modal, posts } = useSelector(
-    (state: RootState) => state.blog
-  );
+  const { status, modal } = useSelector((state: RootState) => state.blog);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleDeletePost = async (postId: string) => {
@@ -29,7 +26,7 @@ export const DeletePostModal = () => {
 
       <div className="mt-4 flex justify-end space-x-2">
         <button
-          onClick={() => handleDeletePost(modal.id)}
+          onClick={() => handleDeletePost(modal.id!)}
           className="bg-red-500 text-white px-4 py-2 mr-2"
         >
           {status === "loading" ? "Deleting..." : "Delete"}
@@ -60,11 +57,13 @@ export const EditPostModal = () => {
   const selectedPost = posts.find((post: Blog) => post.id === modal.id);
 
   useEffect(() => {
-    if (!selectedPost) return;
-
-    setTitle(selectedPost.title);
-    setContent(selectedPost.content);
-  }, [modal.active, modal.purpose, selectedPost]);
+    const fetchSelectedPost = async () => {
+      if (!selectedPost) return;
+      setTitle(selectedPost.title);
+      setContent(selectedPost.content);
+    };
+    fetchSelectedPost();
+  }, [selectedPost]);
 
   const handleEditPost = async (e: FormEvent) => {
     e.preventDefault();

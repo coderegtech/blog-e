@@ -6,26 +6,22 @@ import { logoutAsync } from "@/features/auth/authThunks";
 import { getUserBlogsAsync } from "@/features/blog/blogThunks";
 import { AppDispatch, RootState } from "@/store";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { LuLoaderCircle } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 
-const AccountPage = () => {
+const AccountPage: React.FC = () => {
   const router = useRouter();
-  const [isLoading, setIsloading] = useState(false);
   const user = useSelector((state: RootState) => state.auth.currentUser);
   const dispatch = useDispatch<AppDispatch>();
   const { status, posts } = useSelector((state: RootState) => state.blog);
 
   useEffect(() => {
     const fetchMyPosts = async () => {
-      setIsloading(true);
+      if (!user) return;
       try {
-        setTimeout(async () => {
-          await dispatch(getUserBlogsAsync(user?.uid));
-          setIsloading(false);
-        }, 500);
+        await dispatch(getUserBlogsAsync(user?.uid));
       } catch (error) {
         console.log(error);
       }
@@ -42,7 +38,7 @@ const AccountPage = () => {
   };
 
   return (
-    <div className="min-h-screen p-4 bg-slate-100 flex justify-center items-center relative">
+    <div className="min-h-screen md:p-4 bg-slate-100 flex justify-center md:items-center relative">
       <Card className="h-[calc(100vh-100px)] max-w-md w-full bg-white overflow-hidden">
         <header className="w-full flex justify-between items-center p-2 pb-4 border-b-2">
           <div className="flex items-center gap-2 ">
@@ -96,7 +92,7 @@ const AccountPage = () => {
 
           <div className="mt-4">
             <h2 className="text-xl font-semibold mb-2 ">My Posts</h2>
-            {isLoading ? (
+            {status === "loading" ? (
               <div className="w-full h-full py-10 flex items-center justify-center text-center">
                 <LuLoaderCircle className="text-2xl animate-spin " />
                 <p>loading...</p>

@@ -20,7 +20,6 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     try {
       const res = await dispatch(loginAsync({ email, password }));
-      console.log("logiin :", res);
 
       if (res.type === "auth/loginAsync/rejected") {
         alert(res.error.message || "Login failed");

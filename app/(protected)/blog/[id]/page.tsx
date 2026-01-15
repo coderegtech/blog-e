@@ -3,19 +3,22 @@ import BlogItem from "@/components/BlogItem";
 import { Card } from "@/components/ui/card";
 import { RootState } from "@/store";
 import { Blog } from "@/types";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { BsArrowLeft } from "react-icons/bs";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 
-const BlogViewPage = () => {
+const BlogViewPage: React.FC = () => {
   const { id: postId } = useParams();
   const router = useRouter();
-  const { posts } = useSelector((state: RootState) => state.blog);
+  const { status, posts } = useSelector((state: RootState) => state.blog);
   const selectedPost = posts.find((post: Blog) => post.id == postId);
 
+  if (!selectedPost) return;
+
   return (
-    <div className="min-h-screen p-4 bg-slate-100 flex justify-center items-center relative">
+    <div className="min-h-screen md:p-4 bg-slate-100 flex justify-center md:items-center relative">
       <Card className=" max-w-md w-full bg-white overflow-hidden">
         <header className="w-full flex justify-between items-center p-2 pb-4 border-b-2">
           <div className="flex items-center gap-2 ">
@@ -26,9 +29,9 @@ const BlogViewPage = () => {
           </div>
 
           <div className="flex items-center gap-x-2">
-            <span>
+            <Link href={"/account"}>
               <IoPersonCircleOutline className="text-3xl" />
-            </span>
+            </Link>
           </div>
         </header>
 

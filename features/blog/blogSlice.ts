@@ -61,12 +61,17 @@ export const blogSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createBlogAsync.pending, (state, action) => {
+      // for pending
+      .addCase(createBlogAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(getBlogsAsync.pending, (state, action) => {
+      .addCase(getBlogsAsync.pending, (state) => {
         state.status = "loading";
       })
+      .addCase(getUserBlogsAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      // for fulfilled
       .addCase(createBlogAsync.fulfilled, (state, action) => {
         state.status = "success";
         const blogPost = action.payload;
@@ -102,7 +107,6 @@ export const blogSlice = createSlice({
         state.status = "success";
 
         console.log("deleted post:", action);
-        const blogPost = action.payload;
         state.posts = state.posts.filter((post) => post.id !== action.payload);
 
         // clear states

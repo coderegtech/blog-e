@@ -7,7 +7,6 @@ import { createBlogAsync, getBlogsAsync } from "@/features/blog/blogThunks";
 import { AppDispatch, RootState } from "@/store";
 import { Blog } from "@/types";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 import { IoPersonCircleOutline } from "react-icons/io5";
@@ -17,21 +16,15 @@ import { useDispatch, useSelector } from "react-redux";
 const BlogPage: React.FC = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [isLoading, setIsloading] = useState(false);
   const { currentUser } = useSelector((state: RootState) => state.auth);
 
   const { status, posts } = useSelector((state: RootState) => state.blog);
   const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      setIsloading(true);
       try {
-        setTimeout(async () => {
-          await dispatch(getBlogsAsync());
-          setIsloading(false);
-        }, 500);
+        await dispatch(getBlogsAsync());
       } catch (error) {
         console.log(error);
       }
@@ -41,10 +34,12 @@ const BlogPage: React.FC = () => {
 
   const handleUploadPost = async (e: FormEvent) => {
     e.preventDefault();
-    setIsloading(true);
     if (!title || !content) {
       return;
     }
+
+    if (!currentUser?.uid) return;
+
     try {
       const post: Blog = {
         uid: currentUser?.uid,
@@ -56,19 +51,17 @@ const BlogPage: React.FC = () => {
 
       if (res.type === "blog/createBlogAsync/fulfilled") {
         dispatch(createBlog(post));
-        setIsloading(false);
       }
     } catch (error) {
       console.log(error);
     } finally {
       setTitle("");
       setContent("");
-      setIsloading(false);
     }
   };
 
   return (
-    <div className="min-h-screen p-4 bg-slate-100 flex justify-center items-center relative">
+    <div className="min-h-screen md:p-4 bg-slate-100 flex justify-center md:items-center relative">
       <Card className="h-[calc(100vh-100px)] max-w-md w-full bg-white overflow-hidden">
         <header className="w-full flex justify-between items-center p-2 pb-4 border-b-2">
           <h2 className="text-2xl font-semibold">Blog Page</h2>
@@ -114,7 +107,7 @@ const BlogPage: React.FC = () => {
 
           <div className="mt-4">
             <h2 className="text-xl font-semibold mb-2">Recent Blogs</h2>
-            {isLoading ? (
+            {status === "loading" ? (
               <div className="w-full h-full py-10 flex items-center justify-center text-center">
                 <LuLoaderCircle className="text-2xl animate-spin " />
                 <p>loading...</p>
