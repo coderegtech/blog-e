@@ -19,6 +19,6 @@ export const registerAsync = createAsyncThunk(
 );
 
 export const logoutAsync = createAsyncThunk("auth/signOutAsync", async () => {
-  const response = await logoutUser("test");
+  const response = await logoutUser();
   return response;
 });
