@@ -1,6 +1,6 @@
 import { AuthState } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
-import { loginAsync } from "./authThunks";
+import { loginAsync, registerAsync } from "./authThunks";
 
 const initialState: AuthState = {
   isAuthenticated: false,
@@ -42,10 +42,16 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginAsync.pending, (state, action) => {
+      // for pending
+      .addCase(loginAsync.pending, (state) => {
         state.isLoading = true;
         state.isAuthenticated = false;
       })
+      .addCase(registerAsync.pending, (state) => {
+        state.isLoading = true;
+        state.isAuthenticated = false;
+      })
+      // for fulfilled
       .addCase(loginAsync.fulfilled, (state, action) => {
         console.log("login payload: ", action.payload);
 
@@ -53,8 +59,23 @@ export const authSlice = createSlice({
         state.isAuthenticated = true;
         state.session = action.payload.session;
       })
+      .addCase(registerAsync.fulfilled, (state, action) => {
+        console.log("registration payload: ", action.payload);
+
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.session = action.payload.session;
+      })
+      // for rejected
       .addCase(loginAsync.rejected, (state, action) => {
         console.log("Login Rejected: ", action);
+
+        state.isLoading = false;
+        state.isAuthenticated = false;
+        state.error = action.error.message;
+      })
+      .addCase(registerAsync.rejected, (state, action) => {
+        console.log("registration Rejected: ", action);
 
         state.isLoading = false;
         state.isAuthenticated = false;
