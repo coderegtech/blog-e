@@ -1,12 +1,13 @@
+import { Session } from "@supabase/supabase-js";
 import type { CurrentUserType } from "./user.types";
 
-export type AuthSession = {
-  access_token: string;
-  refresh_token: string;
-  expires_at: number;
-  expires_in: number;
-  token_type: string;
-};
+// | {   access_token: string;
+//       refresh_token: string;
+//       expires_at: number;
+//       expires_in: number;
+//       token_type: string;
+//     };
+export type AuthSession = Session;
 
 export type AuthState = {
   isAuthenticated: boolean;

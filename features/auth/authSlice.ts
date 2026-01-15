@@ -51,7 +51,7 @@ export const authSlice = createSlice({
 
         state.isLoading = false;
         state.isAuthenticated = true;
-        state.session = action.payload?.session;
+        state.session = action.payload.session;
       })
       .addCase(loginAsync.rejected, (state, action) => {
         console.log("Login Rejected: ", action);
