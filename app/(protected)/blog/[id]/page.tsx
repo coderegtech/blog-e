@@ -18,7 +18,7 @@ const BlogViewPage: React.FC = () => {
   if (!selectedPost) return;
 
   return (
-    <div className=" md:p-4 bg-white flex justify-center md:items-center relative">
+    <div className="min-h-screen md:p-4 bg-white flex justify-center md:items-center relative">
       <Card>
         <header className="w-full flex justify-between items-center p-2 pb-4 border-b-2">
           <div className="flex items-center gap-2 ">
@@ -35,7 +35,7 @@ const BlogViewPage: React.FC = () => {
           </div>
         </header>
 
-        <div className="h-[calc(100vh-200px)] overflow-y-auto py-4">
+        <div className="h-[calc(100vh-150px)] sm:h-100 overflow-y-auto py-4">
           <BlogItem
             id={selectedPost?.id}
             uid={selectedPost?.uid}

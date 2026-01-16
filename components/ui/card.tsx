@@ -9,7 +9,7 @@ export const Card = ({
     <div
       className={[
         "border-2 border-black  relative p-4",
-        "min-h-[calc(100dvh)] sm:h-[calc(100vh)] max-w-xl w-full bg-white overflow-hidden",
+        "min-h-[calc(100dvh)] sm:min-h-fit max-w-xl w-full bg-white overflow-hidden",
         className,
       ].join(" ")}
       style={{

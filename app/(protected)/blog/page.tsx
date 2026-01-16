@@ -61,7 +61,7 @@ const BlogPage: React.FC = () => {
   };
 
   return (
-    <div className=" md:p-4 bg-white flex justify-center md:items-center relative">
+    <div className="min-h-screen md:p-4 bg-white flex justify-center md:items-center relative">
       <Card>
         <header className="w-full flex justify-between items-center p-2 pb-4 border-b-2">
           <h2 className="text-2xl font-semibold">Blog Page</h2>
@@ -73,7 +73,7 @@ const BlogPage: React.FC = () => {
           </div>
         </header>
 
-        <div className="h-[calc(100vh-150px)] sm:h-[calc(100vh-50px)] overflow-y-auto">
+        <div className="h-[calc(100vh-150px)] sm:h-fit overflow-y-auto">
           <form
             onSubmit={handleUploadPost}
             className=" flex flex-col space-y-2 py-2 relative"
