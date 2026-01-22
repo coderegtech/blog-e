@@ -1,8 +1,10 @@
 import { Blog } from "@/types";
-import { supabase } from ".";
+import { createSupabaseServerClient } from "./server";
 
 export const createBlog = async (blog: Blog): Promise<Blog> => {
   try {
+    const supabase = await createSupabaseServerClient();
+
     const newPost = {
       uid: blog.uid,
       title: blog.title,
@@ -27,6 +29,8 @@ export const createBlog = async (blog: Blog): Promise<Blog> => {
 
 export const getBlogs = async (): Promise<Blog[]> => {
   try {
+    const supabase = await createSupabaseServerClient();
+
     const { data, error } = await supabase
       .from("blogs")
       .select()
@@ -45,6 +49,8 @@ export const getBlogs = async (): Promise<Blog[]> => {
 
 export const updateBlog = async (blog: Blog) => {
   try {
+    const supabase = await createSupabaseServerClient();
+
     const { data, error } = await supabase
       .from("blogs")
       .update({ ...blog })
@@ -64,6 +70,8 @@ export const updateBlog = async (blog: Blog) => {
 
 export const deleteBlog = async (id: string) => {
   try {
+    const supabase = await createSupabaseServerClient();
+
     const { data, error } = await supabase.from("blogs").delete().eq("id", id);
 
     if (error) {
@@ -79,13 +87,15 @@ export const deleteBlog = async (id: string) => {
 
 export const getBlogById = async (id: string) => {
   try {
+    const supabase = await createSupabaseServerClient();
+
     const { data, error } = await supabase.from("blogs").select().eq("id", id);
 
     if (error) {
       throw Error(error.message);
     }
 
-    return data;
+    return data[0];
   } catch (error) {
     console.error(error);
     throw error;
@@ -94,6 +104,8 @@ export const getBlogById = async (id: string) => {
 
 export const getUserBlogs = async (uid: string) => {
   try {
+    const supabase = await createSupabaseServerClient();
+
     const { data, error } = await supabase
       .from("blogs")
       .select()
