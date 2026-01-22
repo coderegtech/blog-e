@@ -1,12 +1,19 @@
-import { createBlog } from "@/lib/supabase";
 import { Blog } from "@/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const createBlogAsync = createAsyncThunk(
   "blog/createBlogAsync",
   async (blog: Blog) => {
-    const response = await createBlog(blog);
-    return response;
+    const response = await fetch(`/api/blog`, {
+      method: "POST",
+      body: JSON.stringify(blog),
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+    const responseData = await response.json();
+    return responseData?.data;
   },
 );
 
