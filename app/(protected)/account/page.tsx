@@ -6,7 +6,7 @@ import { logoutAsync } from "@/features/auth/authThunks";
 import { getUserBlogsAsync } from "@/features/blog/blogThunks";
 import { AppDispatch, RootState } from "@/store";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { LuLoaderCircle } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,18 +17,18 @@ const AccountPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { status, posts } = useSelector((state: RootState) => state.blog);
 
-  useEffect(() => {
-    const fetchMyPosts = async () => {
-      if (!user) return;
-      try {
-        await dispatch(getUserBlogsAsync(user?.uid));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchMyPosts();
+  const fetchMyPosts = useCallback(async () => {
+    if (!user) return;
+    try {
+      await dispatch(getUserBlogsAsync(user?.uid));
+    } catch (error) {
+      console.log(error);
+    }
   }, [dispatch, user]);
+
+  useEffect(() => {
+    fetchMyPosts();
+  }, [fetchMyPosts]);
 
   const handleLogout = async () => {
     dispatch(logoutAsync());
