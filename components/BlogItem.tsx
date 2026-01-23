@@ -30,7 +30,7 @@ const BlogItem = (props: BlogItemProps) => {
     };
 
     fetchUsername();
-  }, [props?.uid]);
+  }, [props.uid]);
 
   return (
     <div className="border p-4  space-y-2">
@@ -55,7 +55,7 @@ const BlogItem = (props: BlogItemProps) => {
                       purpose: "delete",
                       active: true,
                       id: props.id!,
-                    })
+                    }),
                   )
                 }
               >
@@ -68,7 +68,7 @@ const BlogItem = (props: BlogItemProps) => {
                       purpose: "edit",
                       active: true,
                       id: props.id!,
-                    })
+                    }),
                   )
                 }
               >
