@@ -4,10 +4,10 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const { uid, title, content }: Blog = await request.json();
+    const { uid, image_url, title, content, type }: Blog = await request.json();
 
-    if (!uid || !title || !content) {
-      return NextResponse.json({ messages: "Invalid fields." });
+    if (!uid || !title) {
+      return NextResponse.json({ messages: "Invalid required fields." });
     }
 
     const session = await getSession();
@@ -19,7 +19,15 @@ export async function POST(request: Request) {
       });
     }
 
-    const responseData = await createBlog({ uid, title, content });
+    const responseData = await createBlog({
+      uid,
+      image_url,
+      title,
+      content,
+      type,
+    });
+
+    console.log("create blog response: ", responseData);
 
     return NextResponse.json({
       status: 201,
@@ -27,11 +35,7 @@ export async function POST(request: Request) {
       data: responseData,
     });
   } catch (error) {
-    console.error("[v0] Fetch chat error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch messages" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
 
@@ -50,10 +54,6 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ status: 200, messages: "", data: blogs });
   } catch (error) {
-    console.error("[v0] Fetch chat error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch messages" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }

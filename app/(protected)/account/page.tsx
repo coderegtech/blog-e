@@ -63,33 +63,7 @@ const AccountPage: React.FC = () => {
           <p className="text-base">{user?.email}</p>
         </div>
 
-        <div className="h-[calc(100vh-150px)] sm:h-fit overflow-y-auto">
-          {/* <form
-            onSubmit={() => {}}
-            className="flex flex-col space-y-2 py-2 relative"
-          >
-            <input
-              type="text"
-              className="text-black placeholder:text-neutral-500 p-2 border"
-              placeholder="Title"
-              required
-            />
-
-            <textarea
-              className="text-black placeholder:text-neutral-500 p-2 border resize-x-none "
-              rows={3}
-              placeholder="What's on your mind?"
-            ></textarea>
-
-            <button
-              type="submit"
-              className="flex items-center space-x-2 bg-orange-500 text-white px-4 py-2 self-end cursor-pointer"
-            >
-              <AiOutlineSend className="text-md" />
-              <p>POST</p>
-            </button>
-          </form> */}
-
+        <div className="max-h-[calc(100dvh-250px)] pb-14 overflow-y-auto">
           <div className="mt-4">
             <h2 className="text-xl font-semibold mb-2 ">My Posts</h2>
             {status === "loading" ? (

@@ -27,11 +27,7 @@ export async function GET(
 
     return NextResponse.json({ status: 200, messages: "", data: blog });
   } catch (error) {
-    console.error("[v0] Fetch chat error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch messages" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
 
@@ -59,11 +55,7 @@ export async function DELETE(
       data: blog,
     });
   } catch (error) {
-    console.error("[v0] Fetch chat error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch messages" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
 
@@ -73,7 +65,7 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const { title, content } = await request.json();
+    const { image_url, title, content } = await request.json();
 
     const session = await getSession();
 
@@ -89,6 +81,7 @@ export async function PATCH(
     const newData: Blog = {
       id,
       uid,
+      image_url,
       title,
       content,
     };
@@ -101,10 +94,6 @@ export async function PATCH(
       data: blog,
     });
   } catch (error) {
-    console.error("[v0] Fetch chat error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch messages" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }

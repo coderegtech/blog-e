@@ -1,5 +1,5 @@
 import { LoginPayload, RegisterPayload } from "@/types";
-import { createUser, getUserByEmail, supabase } from ".";
+import { createUser, getUserByEmail, supabaseClient } from ".";
 
 export const registerUser = async (auth: RegisterPayload) => {
   try {
@@ -10,7 +10,7 @@ export const registerUser = async (auth: RegisterPayload) => {
       throw Error("Email already exist!");
     }
 
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabaseClient.auth.signUp({
       email: auth.email,
       password: auth.password,
     });
@@ -38,7 +38,7 @@ export const registerUser = async (auth: RegisterPayload) => {
 
 export const signinUser = async (auth: LoginPayload) => {
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
       email: auth.email,
       password: auth.password,
     });
@@ -56,7 +56,7 @@ export const signinUser = async (auth: LoginPayload) => {
 
 export const logoutUser = async () => {
   try {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabaseClient.auth.signOut();
 
     if (error) {
       console.log("logout error: ", error);

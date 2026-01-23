@@ -1,12 +1,7 @@
 "use client";
 
-import {
-  logout,
-  setCurrentUser,
-  setSession,
-  setUserId,
-} from "@/features/auth/authSlice";
-import { getUserById, supabase } from "@/lib/supabase";
+import { logout, setCurrentUser, setUserId } from "@/features/auth/authSlice";
+import { getUserById, supabaseClient } from "@/lib/supabase";
 import { AppDispatch } from "@/store";
 import { AuthChangeEvent } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
@@ -18,12 +13,8 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange(
+    const { data } = supabaseClient.auth.onAuthStateChange(
       async (_event: AuthChangeEvent, session) => {
-        console.log("Auth session: ", session);
-
-        dispatch(setSession(session));
-
         const userId = session?.user.id as string;
 
         if (!userId) return;
@@ -37,7 +28,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
           dispatch(logout());
           router.push("/login");
         }
-      }
+      },
     );
 
     return () => {

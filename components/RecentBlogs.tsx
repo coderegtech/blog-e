@@ -11,7 +11,7 @@ const RecentBlogs = ({ posts }: { posts: Blog[] }) => {
   const startIndex = (currentPage - 1) * postsPerPage;
   const paginatedPosts: Blog[] = posts?.slice(
     startIndex,
-    startIndex + postsPerPage
+    startIndex + postsPerPage,
   );
 
   return (

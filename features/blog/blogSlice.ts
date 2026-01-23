@@ -1,10 +1,12 @@
 import { Blog, BlogState } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+  addCommentAsync,
   createBlogAsync,
   deleteBlogAsync,
   editBlogAsync,
   getBlogAsync,
+  getBlogCommentsAsync,
   getBlogsAsync,
   getUserBlogsAsync,
 } from "./blogThunks";
@@ -12,6 +14,7 @@ import {
 const initialState: BlogState = {
   posts: [],
   post: null,
+  comments: [],
   modal: {
     purpose: "",
     active: false,
@@ -58,6 +61,9 @@ export const blogSlice = createSlice({
         active: action.payload.active,
         id: action.payload.id,
       };
+
+      state.post =
+        state.posts.find((post) => post.id === action.payload.id) ?? null;
     },
   },
   extraReducers: (builder) => {
@@ -82,6 +88,11 @@ export const blogSlice = createSlice({
         const blogPost = action.payload;
         state.posts.unshift(blogPost);
       })
+      .addCase(addCommentAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        const comment = action.payload;
+        state.comments.unshift(comment);
+      })
       .addCase(getBlogsAsync.fulfilled, (state, action) => {
         state.status = "success";
         state.posts = action.payload;
@@ -93,6 +104,10 @@ export const blogSlice = createSlice({
       .addCase(getUserBlogsAsync.fulfilled, (state, action) => {
         state.status = "success";
         state.posts = action.payload;
+      })
+      .addCase(getBlogCommentsAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.comments = action.payload;
       })
       .addCase(editBlogAsync.fulfilled, (state, action) => {
         // update the blog post to its position in posts array

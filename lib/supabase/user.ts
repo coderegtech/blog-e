@@ -1,12 +1,11 @@
 import { User, UserPayload } from "@/types";
-import { supabase } from ".";
+import { supabaseClient } from ".";
 
 export const createUser = async (user: UserPayload): Promise<User> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from("users")
       .upsert({
-        uid: user.uid,
         username: user.username,
         email: user.email,
       })
@@ -25,7 +24,10 @@ export const createUser = async (user: UserPayload): Promise<User> => {
 
 export const getUserById = async (id: string): Promise<User> => {
   try {
-    const { data, error } = await supabase.from("users").select().eq("uid", id);
+    const { data, error } = await supabaseClient
+      .from("users")
+      .select()
+      .eq("uid", id);
 
     if (error) {
       throw Error(error.message);
@@ -40,7 +42,7 @@ export const getUserById = async (id: string): Promise<User> => {
 
 export const getUserByEmail = async (email: string): Promise<User> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from("users")
       .select()
       .eq("email", email)

@@ -1,12 +1,12 @@
-import { getSession, getUserBlogs } from "@/lib/supabase";
+import { getComments, getSession } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ uid: string }> },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { uid } = await params;
+    const { id } = await params;
 
     const session = await getSession();
 
@@ -17,9 +17,15 @@ export async function GET(
       });
     }
 
-    const blog = await getUserBlogs(uid);
+    const comments = await getComments(id);
 
-    return NextResponse.json({ status: 200, messages: "", data: blog });
+    console.log("comments: ", comments);
+
+    return NextResponse.json({
+      status: 200,
+      messages: "",
+      data: comments || [],
+    });
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 500 });
   }

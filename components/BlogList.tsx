@@ -17,16 +17,19 @@ const BlogList = ({ posts }: BlogListProps) => {
           return (
             <BlogItem
               key={index}
-              id={item.id}
-              uid={item.uid}
-              title={item.title}
+              id={item?.id}
+              uid={item?.uid}
+              image_url={item.image_url}
+              title={item?.title}
               content={
-                item.content.length > 100
-                  ? item.content.substring(0, 100) + "..."
-                  : item.content
+                item?.content && item?.content.length > 100
+                  ? item?.content.substring(0, 100) + "..."
+                  : item?.content
               }
+              type={item?.type}
               created_at={item?.created_at}
               updated_at={item?.updated_at}
+              users={item?.users}
             />
           );
         })

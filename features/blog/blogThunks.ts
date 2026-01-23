@@ -1,4 +1,5 @@
 import { Blog } from "@/types";
+import { CommentPayload } from "@/types/comment.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const createBlogAsync = createAsyncThunk(
@@ -14,6 +15,9 @@ export const createBlogAsync = createAsyncThunk(
         return [];
       }
       const responseData = await response.json();
+      console.log("blog payload:", blog);
+      console.log("blog created: ", responseData?.data);
+
       return responseData?.data;
     } catch (error) {
       throw error;
@@ -29,7 +33,6 @@ export const getBlogsAsync = createAsyncThunk(
       if (!response.ok) {
         return [];
       }
-      console.log("from thunks: ", response);
       const responseData = await response.json();
       return responseData?.data;
     } catch (error) {
@@ -98,6 +101,43 @@ export const deleteBlogAsync = createAsyncThunk(
         method: "DELETE",
       });
 
+      if (!response.ok) {
+        return [];
+      }
+      const responseData = await response.json();
+      return responseData?.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+);
+
+// Comments thunks
+export const addCommentAsync = createAsyncThunk(
+  "blog/addCommentAsync",
+  async (comment: CommentPayload) => {
+    try {
+      const response = await fetch(`/api/comment`, {
+        method: "POST",
+        body: JSON.stringify(comment),
+      });
+
+      if (!response.ok) {
+        return [];
+      }
+      const responseData = await response.json();
+      return responseData?.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+);
+
+export const getBlogCommentsAsync = createAsyncThunk(
+  "blog/getBlogCommentsAsync",
+  async (blogId: string) => {
+    try {
+      const response = await fetch(`/api/comment/${blogId}`);
       if (!response.ok) {
         return [];
       }

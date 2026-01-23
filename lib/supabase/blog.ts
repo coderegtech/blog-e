@@ -1,20 +1,31 @@
 import { Blog } from "@/types";
-import { createSupabaseServerClient } from "./server";
+import { supabaseClient } from ".";
 
-export const createBlog = async (blog: Blog): Promise<Blog> => {
+export const createBlog = async (blog: Blog) => {
   try {
-    const supabase = await createSupabaseServerClient();
-
     const newPost = {
       uid: blog.uid,
+      image_url: blog.image_url,
       title: blog.title,
       content: blog.content,
+      type: blog.type,
     };
 
-    const { data, error } = await supabase
-      .from("blogs")
-      .insert(newPost)
-      .select();
+    const { data, error } = await supabaseClient.from("blogs").insert(newPost)
+      .select(`
+        id,
+        image_url,
+        title,
+        content,
+        type,
+        uid,
+        created_at,
+        updated_at,
+        users (
+          uid,
+          username
+        )
+        `);
 
     if (error) {
       throw Error(error.message);
@@ -27,13 +38,26 @@ export const createBlog = async (blog: Blog): Promise<Blog> => {
   }
 };
 
-export const getBlogs = async (): Promise<Blog[]> => {
+export const getBlogs = async () => {
   try {
-    const supabase = await createSupabaseServerClient();
-
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from("blogs")
-      .select()
+      .select(
+        `
+        id,
+        image_url,
+        title,
+        content,
+        type,
+        uid,
+        created_at,
+        updated_at,
+        users (
+          uid,
+          username
+        )
+        `,
+      )
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -49,13 +73,23 @@ export const getBlogs = async (): Promise<Blog[]> => {
 
 export const updateBlog = async (blog: Blog) => {
   try {
-    const supabase = await createSupabaseServerClient();
-
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from("blogs")
       .update({ ...blog })
-      .eq("id", blog.id)
-      .select();
+      .eq("id", blog.id).select(`
+        id,
+        image_url,
+        title,
+        content,
+        type,
+        uid,
+        created_at,
+        updated_at,
+        users (
+          uid,
+          username
+        )
+        `);
 
     if (error) {
       throw Error(error.message);
@@ -70,9 +104,10 @@ export const updateBlog = async (blog: Blog) => {
 
 export const deleteBlog = async (id: string) => {
   try {
-    const supabase = await createSupabaseServerClient();
-
-    const { data, error } = await supabase.from("blogs").delete().eq("id", id);
+    const { data, error } = await supabaseClient
+      .from("blogs")
+      .delete()
+      .eq("id", id);
 
     if (error) {
       throw Error(error.message);
@@ -87,9 +122,25 @@ export const deleteBlog = async (id: string) => {
 
 export const getBlogById = async (id: string) => {
   try {
-    const supabase = await createSupabaseServerClient();
-
-    const { data, error } = await supabase.from("blogs").select().eq("id", id);
+    const { data, error } = await supabaseClient
+      .from("blogs")
+      .select(
+        `
+        id,
+        image_url,
+        title,
+        content,
+        type,
+        uid,
+        created_at,
+        updated_at,
+        users (
+          uid,
+          username
+        )
+        `,
+      )
+      .eq("id", id);
 
     if (error) {
       throw Error(error.message);
@@ -104,11 +155,24 @@ export const getBlogById = async (id: string) => {
 
 export const getUserBlogs = async (uid: string) => {
   try {
-    const supabase = await createSupabaseServerClient();
-
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from("blogs")
-      .select()
+      .select(
+        `
+        id,
+        image_url,
+        title,
+        content,
+        type,
+        uid,
+        created_at,
+        updated_at,
+        users (
+          uid,
+          username
+        )
+        `,
+      )
       .eq("uid", uid)
       .order("created_at", { ascending: false });
 
