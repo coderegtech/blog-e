@@ -1,21 +1,34 @@
 "use client";
 import BlogItem from "@/components/BlogItem";
 import { Card } from "@/components/ui/card";
-import { RootState } from "@/store";
-import { Blog } from "@/types";
+import { getBlogAsync } from "@/features/blog/blogThunks";
+import { AppDispatch, RootState } from "@/store";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useCallback, useEffect } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { IoPersonCircleOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import { LuLoaderCircle } from "react-icons/lu";
+import { useDispatch, useSelector } from "react-redux";
 
 const BlogViewPage: React.FC = () => {
   const { id: postId } = useParams();
   const router = useRouter();
-  const { status, posts } = useSelector((state: RootState) => state.blog);
-  const selectedPost = posts.find((post: Blog) => post.id == postId);
+  const dispatch = useDispatch<AppDispatch>();
+  const { status, post } = useSelector((state: RootState) => state.blog);
 
-  if (!selectedPost) return;
+  const fetchBlog = useCallback(async () => {
+    if (!postId) return;
+    try {
+      await dispatch(getBlogAsync(postId as string));
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch, postId]);
+
+  useEffect(() => {
+    fetchBlog();
+  }, [fetchBlog]);
 
   return (
     <div className="min-h-screen md:p-4 bg-white flex justify-center md:items-center relative">
@@ -36,14 +49,21 @@ const BlogViewPage: React.FC = () => {
         </header>
 
         <div className="h-[calc(100vh-150px)] sm:h-100 overflow-y-auto py-4">
-          <BlogItem
-            id={selectedPost?.id}
-            uid={selectedPost?.uid}
-            title={selectedPost?.title}
-            content={selectedPost?.content}
-            created_at={selectedPost?.created_at}
-            updated_at={selectedPost?.updated_at}
-          />
+          {status === "loading" ? (
+            <div className="w-full h-full py-10 flex items-center justify-center text-center">
+              <LuLoaderCircle className="text-2xl animate-spin " />
+              <p>loading...</p>
+            </div>
+          ) : (
+            <BlogItem
+              id={post?.id}
+              uid={post?.uid}
+              title={post?.title}
+              content={post?.content}
+              created_at={post?.created_at}
+              updated_at={post?.updated_at}
+            />
+          )}
         </div>
       </Card>
     </div>

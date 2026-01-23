@@ -22,14 +22,7 @@ const BlogPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        await dispatch(getBlogsAsync());
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchBlogs();
+    dispatch(getBlogsAsync());
   }, [dispatch]);
 
   const handleUploadPost = async (e: FormEvent) => {
