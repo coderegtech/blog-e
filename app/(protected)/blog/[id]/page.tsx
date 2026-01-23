@@ -54,7 +54,7 @@ const BlogViewPage: React.FC = () => {
               <LuLoaderCircle className="text-2xl animate-spin " />
               <p>loading...</p>
             </div>
-          ) : (
+          ) : post !== null ? (
             <BlogItem
               id={post?.id}
               uid={post?.uid}
@@ -63,7 +63,7 @@ const BlogViewPage: React.FC = () => {
               created_at={post?.created_at}
               updated_at={post?.updated_at}
             />
-          )}
+          ) : null}
         </div>
       </Card>
     </div>
