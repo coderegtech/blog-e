@@ -4,6 +4,7 @@ import {
   createBlogAsync,
   deleteBlogAsync,
   editBlogAsync,
+  getBlogAsync,
   getBlogsAsync,
   getUserBlogsAsync,
 } from "./blogThunks";
@@ -50,7 +51,7 @@ export const blogSlice = createSlice({
         purpose: "delete" | "edit";
         active: boolean;
         id: string;
-      }>
+      }>,
     ) => {
       state.modal = {
         purpose: action.payload.purpose,
@@ -68,6 +69,10 @@ export const blogSlice = createSlice({
       .addCase(getBlogsAsync.pending, (state) => {
         state.status = "loading";
       })
+      .addCase(getBlogAsync.pending, (state) => {
+        state.status = "loading";
+        state.post = null;
+      })
       .addCase(getUserBlogsAsync.pending, (state) => {
         state.status = "loading";
       })
@@ -80,6 +85,10 @@ export const blogSlice = createSlice({
       .addCase(getBlogsAsync.fulfilled, (state, action) => {
         state.status = "success";
         state.posts = action.payload;
+      })
+      .addCase(getBlogAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.post = action.payload;
       })
       .addCase(getUserBlogsAsync.fulfilled, (state, action) => {
         state.status = "success";

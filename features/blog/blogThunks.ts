@@ -38,6 +38,22 @@ export const getBlogsAsync = createAsyncThunk(
   },
 );
 
+export const getBlogAsync = createAsyncThunk(
+  "blog/getBlogAsync",
+  async (id: string) => {
+    try {
+      const response = await fetch(`/api/blog/${id}`);
+      if (!response.ok) {
+        return [];
+      }
+      const responseData = await response.json();
+      return responseData?.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+);
+
 export const getUserBlogsAsync = createAsyncThunk(
   "blog/getUserBlogsAsync",
   async (uid: string) => {
