@@ -29,7 +29,11 @@ const BlogItem = (props: BlogItemProps) => {
     <div className="border p-4  space-y-2 cursor-pointer">
       <div className="border-b pb-2  flex justify-between ">
         <div className="max-w-xs">
-          <h3 className="text-lg font-bold">{props?.title}</h3>
+          <h3 className="text-lg font-bold">
+            {!inViewPage && props.title.length > 20
+              ? props.title.substring(0, 30) + "..."
+              : props.title}
+          </h3>
           <p className="text-sm ">
             @{props?.users?.username}{" "}
             <span className="text-xs text-neutral-500">
