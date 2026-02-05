@@ -1,5 +1,3 @@
-"use server";
-
 import { LoginPayload, RegisterPayload } from "@/types";
 import { createUser, getUserByEmail, supabaseClient } from ".";
 
