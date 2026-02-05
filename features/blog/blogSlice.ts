@@ -82,6 +82,9 @@ export const blogSlice = createSlice({
       .addCase(getUserBlogsAsync.pending, (state) => {
         state.status = "loading";
       })
+      .addCase(editBlogAsync.pending, (state) => {
+        state.status = "loading";
+      })
       // for fulfilled
       .addCase(createBlogAsync.fulfilled, (state, action) => {
         state.status = "success";

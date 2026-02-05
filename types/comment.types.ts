@@ -1,3 +1,4 @@
+import { Blog } from "./blog.types";
 import { User } from "./user.types";
 
 export type Comment = {
@@ -7,6 +8,7 @@ export type Comment = {
   created_at: Date;
   updated_at?: Date;
   user?: User;
+  blog?: Blog;
 };
 
 export type CommentPayload = {

@@ -80,11 +80,10 @@ const BlogItem = (props: BlogItemProps) => {
       </div>
       <div
         onClick={() => router.push(`/blog/${props.id}`)}
-        className="w-full h-full cursor-pointer"
+        className="w-full h-full cursor-pointer space-y-2"
       >
-        {props.type === "text" ? (
-          <p className="text-base font-medium">{props?.content}</p>
-        ) : props.type === "image" ? (
+        <p className="text-base font-medium">{props?.content}</p>
+        {props.image_url && (
           <Image
             src={props.image_url as string}
             alt={props.title}
@@ -92,7 +91,7 @@ const BlogItem = (props: BlogItemProps) => {
             height={100}
             className={`w-full ${!inViewPage ? "max-h-56 object-cover" : "h-full object-contain"}`}
           />
-        ) : null}
+        )}
       </div>
 
       <div

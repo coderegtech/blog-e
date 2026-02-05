@@ -77,9 +77,7 @@ export const EditPostModal = () => {
       setTitle(selectedPost.title);
       setContent(selectedPost.content);
 
-      if (selectedPost?.image_url) {
-        setImagePreview(selectedPost.image_url as string);
-      }
+      setImagePreview(selectedPost.image_url as string);
     };
     fetchSelectedPost();
   }, [selectedPost]);
@@ -91,7 +89,7 @@ export const EditPostModal = () => {
 
       const updatedPost: Blog = {
         ...selectedPost!,
-        image_url: imageUrl || (selectedPost?.image_url as string) || "",
+        image_url: imageUrl || "",
         title,
         content,
       };
@@ -123,31 +121,28 @@ export const EditPostModal = () => {
           required
         />
 
-        <div className="p-2 h-40 border relative">
-          {!imagePreview && (
-            <textarea
-              rows={3}
-              placeholder="What's on your mind?"
-              onChange={(e) => setContent(e.target.value)}
-              value={content}
-              className="text-black h-full w-full placeholder:text-neutral-500 focus:outline-none border-none resize-x-none"
-            ></textarea>
-          )}
+        <div className="p-2 h-full border relative">
+          <textarea
+            rows={3}
+            placeholder="What's on your mind?"
+            onChange={(e) => setContent(e.target.value)}
+            value={content}
+            className="text-black h-full w-full placeholder:text-neutral-500 focus:outline-none border-none resize-x-none "
+          ></textarea>
 
           {/* preview image  */}
           {imagePreview && (
-            <div className="absolute inset-2 ">
+            <div className=" flex items-start">
+              <span onClick={() => setImagePreview(null)}>
+                <IoClose className="text-2xl hover:text-red-500 cursor-pointer" />
+              </span>
               <Image
                 src={imagePreview}
                 alt={title}
                 width={100}
                 height={100}
-                className="w-full h-full object-contain"
+                className="w-40 h-40 object-contain"
               />
-
-              <span onClick={() => setImagePreview(null)}>
-                <IoClose className="absolute top-0 text-2xl hover:text-red-500 cursor-pointer" />
-              </span>
             </div>
           )}
 
@@ -163,7 +158,7 @@ export const EditPostModal = () => {
           {!imagePreview && (
             <div
               onClick={() => imageRef.current?.click()}
-              className="absolute bottom-2 left-2  cursor-pointer"
+              className="pt-2  cursor-pointer"
             >
               <FcGallery className="text-2xl text-black" />
             </div>
