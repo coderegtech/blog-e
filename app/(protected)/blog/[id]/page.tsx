@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 const BlogViewPage: React.FC = () => {
   const { id: postId } = useParams();
   const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
   const [content, setContent] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
@@ -61,6 +62,7 @@ const BlogViewPage: React.FC = () => {
   const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!postId && currentUser?.uid) return;
+    setSubmitting(true);
 
     if (!content && !imageFile) return;
     try {
@@ -79,6 +81,7 @@ const BlogViewPage: React.FC = () => {
     } finally {
       setContent("");
       setImagePreview(null);
+      setSubmitting(false);
     }
   };
 
@@ -175,8 +178,13 @@ const BlogViewPage: React.FC = () => {
                 <button
                   type="submit"
                   className="px-4 h-10 bg-orange-500 text-white rounded-md"
+                  disabled={submitting}
                 >
-                  <AiOutlineSend className="text-md" />
+                  {submitting ? (
+                    <LuLoaderCircle className="text-xl animate-spin text-white" />
+                  ) : (
+                    <AiOutlineSend className="text-md" />
+                  )}
                 </button>
               </div>
             </form>
