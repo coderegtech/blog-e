@@ -23,6 +23,7 @@ export type BlogState = {
   posts: Blog[];
   post: Blog | null;
   comments: Comment[];
+  comment: Comment | null;
   modal: Modal;
   postId: string | null;
   status: "idle" | "loading" | "success" | "error";

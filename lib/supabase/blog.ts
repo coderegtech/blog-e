@@ -107,13 +107,14 @@ export const deleteBlog = async (id: string) => {
     const { data, error } = await supabaseClient
       .from("blogs")
       .delete()
-      .eq("id", id);
+      .eq("id", id)
+      .select();
 
     if (error) {
       throw Error(error.message);
     }
 
-    return data;
+    return data[0];
   } catch (error) {
     console.error(error);
     throw error;

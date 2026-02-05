@@ -12,8 +12,9 @@ export type Comment = {
 };
 
 export type CommentPayload = {
-  image_url?: string;
-  content?: string;
-  user: string;
-  blog: string;
+  id?: string;
+  image_url: string;
+  content: string;
+  user?: string;
+  blog?: string;
 };

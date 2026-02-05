@@ -114,7 +114,7 @@ export const deleteBlogAsync = createAsyncThunk(
 
 // Comments thunks
 export const addCommentAsync = createAsyncThunk(
-  "blog/addCommentAsync",
+  "comment/addCommentAsync",
   async (comment: CommentPayload) => {
     try {
       const response = await fetch(`/api/comment`, {
@@ -134,10 +134,49 @@ export const addCommentAsync = createAsyncThunk(
 );
 
 export const getBlogCommentsAsync = createAsyncThunk(
-  "blog/getBlogCommentsAsync",
+  "comment/getBlogCommentsAsync",
   async (blogId: string) => {
     try {
       const response = await fetch(`/api/comment/${blogId}`);
+      if (!response.ok) {
+        return [];
+      }
+      const responseData = await response.json();
+      return responseData?.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+);
+
+export const editCommentAsync = createAsyncThunk(
+  "comment/editCommentAsync",
+  async (comment: CommentPayload) => {
+    try {
+      const response = await fetch(`/api/comment/${comment.id}`, {
+        method: "PATCH",
+        body: JSON.stringify(comment),
+      });
+
+      if (!response.ok) {
+        return [];
+      }
+      const responseData = await response.json();
+      return responseData?.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+);
+
+export const deleteCommentAsync = createAsyncThunk(
+  "comment/deleteCommentAsync",
+  async (commentId: string) => {
+    try {
+      const response = await fetch(`/api/comment/${commentId}`, {
+        method: "DELETE",
+      });
+
       if (!response.ok) {
         return [];
       }

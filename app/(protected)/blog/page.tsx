@@ -16,6 +16,7 @@ import { LuLoaderCircle } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 
 const BlogPage: React.FC = () => {
+  const [submitting, setIsSubmitting] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -45,6 +46,8 @@ const BlogPage: React.FC = () => {
 
     if (!currentUser?.uid) return;
 
+    setIsSubmitting(true);
+
     try {
       const imageUrl = await uploadImageFile();
 
@@ -60,6 +63,7 @@ const BlogPage: React.FC = () => {
     } catch (error) {
       console.log(error);
     } finally {
+      setIsSubmitting(false);
       setTitle("");
       setContent("");
       setImagePreview(null);
@@ -118,20 +122,19 @@ const BlogPage: React.FC = () => {
                 </div>
               )}
 
-              <input
-                ref={imageRef}
-                onChange={handleImageOnChange}
-                type="file"
-                name="image"
-                accept="image/png, image/jpeg, image/jpg"
-                hidden
-              />
-
               {!imagePreview && (
                 <div
                   onClick={() => imageRef.current?.click()}
-                  className="pt-2  cursor-pointer"
+                  className="w-fit pt-2 cursor-pointer"
                 >
+                  <input
+                    ref={imageRef}
+                    onChange={handleImageOnChange}
+                    type="file"
+                    name="image"
+                    accept="image/png, image/jpeg, image/jpg"
+                    hidden
+                  />
                   <FcGallery className="text-2xl text-black" />
                 </div>
               )}
@@ -139,11 +142,20 @@ const BlogPage: React.FC = () => {
 
             <button
               type="submit"
-              disabled={!title || status === "loading"}
+              disabled={!title || submitting}
               className="flex items-center space-x-2 bg-orange-500 text-white px-4 py-2 self-end cursor-pointer"
             >
-              <AiOutlineSend className="text-md" />
-              <p>POST</p>
+              {submitting ? (
+                <>
+                  <LuLoaderCircle className="text-2xl animate-spin " />
+                  <p>uploading...</p>
+                </>
+              ) : (
+                <>
+                  <AiOutlineSend className="text-md" />
+                  <p>POST</p>
+                </>
+              )}
             </button>
           </form>
 

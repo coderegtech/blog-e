@@ -4,7 +4,9 @@ import {
   addCommentAsync,
   createBlogAsync,
   deleteBlogAsync,
+  deleteCommentAsync,
   editBlogAsync,
+  editCommentAsync,
   getBlogAsync,
   getBlogCommentsAsync,
   getBlogsAsync,
@@ -15,6 +17,7 @@ const initialState: BlogState = {
   posts: [],
   post: null,
   comments: [],
+  comment: null,
   modal: {
     purpose: "",
     active: false,
@@ -64,6 +67,24 @@ export const blogSlice = createSlice({
 
       state.post =
         state.posts.find((post) => post.id === action.payload.id) ?? null;
+    },
+    setSelectedComment: (
+      state,
+      action: PayloadAction<{
+        purpose: "delete" | "edit";
+        active: boolean;
+        id: string;
+      }>,
+    ) => {
+      state.modal = {
+        purpose: action.payload.purpose,
+        active: action.payload.active,
+        id: action.payload.id,
+      };
+
+      state.comment =
+        state.comments.find((comment) => comment.id === action.payload.id) ??
+        null;
     },
   },
   extraReducers: (builder) => {
@@ -130,24 +151,50 @@ export const blogSlice = createSlice({
           id: "",
         };
       })
+      .addCase(editCommentAsync.fulfilled, (state, action) => {
+        // update the blog comments to its position in comments array
+        state.comments = state.comments.map((comment) => {
+          if (comment.id === action.payload.id) {
+            return action.payload;
+          }
+          return comment;
+        });
+
+        state.status = "success";
+      })
       .addCase(deleteBlogAsync.fulfilled, (state, action) => {
         state.status = "success";
-
-        console.log("deleted post:", action);
+        console.log("deleted post:", action.payload);
         state.posts = state.posts.filter((post) => post.id !== action.payload);
 
-        // clear states
         state.modal = {
           purpose: "",
           active: false,
           id: "",
         };
         state.postId = null;
+      })
+      .addCase(deleteCommentAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        console.log("deleted comment:", action.payload);
+        state.comments = state.comments.filter(
+          (comment) => comment.id !== action.payload,
+        );
+        state.modal = {
+          purpose: "",
+          active: false,
+          id: "",
+        };
       });
   },
 });
 
-export const { createBlog, setBlogs, removeBlog, setSelectedPost } =
-  blogSlice.actions;
+export const {
+  createBlog,
+  setBlogs,
+  removeBlog,
+  setSelectedPost,
+  setSelectedComment,
+} = blogSlice.actions;
 
 export default blogSlice.reducer;

@@ -62,3 +62,52 @@ export const getComments = async (blogId: string) => {
     throw error;
   }
 };
+
+export const updateComment = async (comment: CommentPayload) => {
+  try {
+    const { data, error } = await supabaseClient
+      .from("comments")
+      .update({ ...comment })
+      .eq("id", comment.id).select(`
+            id,
+            image_url,
+            content,
+            created_at,
+            user (
+                uid,
+                username
+            ),
+            blog (
+                  id
+            )
+            `);
+
+    if (error) {
+      throw Error(error.message);
+    }
+
+    return data[0];
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const deleteComment = async (id: string) => {
+  try {
+    const { data, error } = await supabaseClient
+      .from("comments")
+      .delete()
+      .eq("id", id)
+      .select();
+
+    if (error) {
+      throw Error(error.message);
+    }
+
+    return data[0];
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
