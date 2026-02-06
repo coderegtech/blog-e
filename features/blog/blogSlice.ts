@@ -165,7 +165,9 @@ export const blogSlice = createSlice({
       .addCase(deleteBlogAsync.fulfilled, (state, action) => {
         state.status = "success";
         console.log("deleted post:", action.payload);
-        state.posts = state.posts.filter((post) => post.id !== action.payload);
+        state.posts = state.posts.filter(
+          (post) => post.id !== action.payload.id,
+        );
 
         state.modal = {
           purpose: "",
@@ -178,7 +180,7 @@ export const blogSlice = createSlice({
         state.status = "success";
         console.log("deleted comment:", action.payload);
         state.comments = state.comments.filter(
-          (comment) => comment.id !== action.payload,
+          (comment) => comment.id !== action.payload.id,
         );
         state.modal = {
           purpose: "",
