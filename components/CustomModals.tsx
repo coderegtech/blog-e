@@ -12,15 +12,21 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "./ui/modal";
 
 export const DeletePostModal = () => {
+  const [loading, setLoading] = useState(false);
   const { status, modal } = useSelector((state: RootState) => state.blog);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleDeletePost = async (postId: string) => {
+    if (!postId) return;
+
+    setLoading(true);
     try {
       await dispatch(deleteBlogAsync(postId));
       dispatch(removeBlog(postId));
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,7 +40,7 @@ export const DeletePostModal = () => {
           onClick={() => handleDeletePost(modal.id!)}
           className="bg-red-500 text-white px-4 py-2 mr-2"
         >
-          {status === "loading" ? "Deleting..." : "Delete"}
+          {loading ? "Deleting..." : "Delete"}
         </button>
         <button
           onClick={() =>
@@ -54,7 +60,7 @@ export const DeletePostModal = () => {
 export const EditPostModal = () => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
-
+  const [loading, setLoading] = useState(false);
   const {
     status,
     modal,
@@ -84,6 +90,8 @@ export const EditPostModal = () => {
 
   const handleEditPost = async (e: FormEvent) => {
     e.preventDefault();
+
+    setLoading(true);
     try {
       const imageUrl = await uploadImageFile();
 
@@ -101,6 +109,8 @@ export const EditPostModal = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -170,7 +180,7 @@ export const EditPostModal = () => {
             type="submit"
             className="bg-orange-500 text-white px-4 py-2 mr-2"
           >
-            {status === "loading" ? "Updating..." : "Update"}
+            {loading ? "Updating..." : "Update"}
           </button>
           <button
             onClick={() => {
