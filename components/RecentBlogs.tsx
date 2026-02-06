@@ -1,10 +1,12 @@
 "use client";
 import { Blog } from "@/types";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import BlogList from "./BlogList";
 
 const RecentBlogs = ({ posts }: { posts: Blog[] }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const currentPage = Number(searchParams.get("page")) || 1;
   const postsPerPage = 3;
 
   const totalPages = Math.ceil(posts.length / postsPerPage);
@@ -13,6 +15,12 @@ const RecentBlogs = ({ posts }: { posts: Blog[] }) => {
     startIndex,
     startIndex + postsPerPage,
   );
+
+  const setCurrentPage = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`);
+  };
 
   return (
     <div>
