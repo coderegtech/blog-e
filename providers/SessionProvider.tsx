@@ -22,8 +22,10 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
         const currentUser = await getUserById(userId);
 
         console.log("current user:", currentUser);
-        dispatch(setUserId(userId));
-        dispatch(setCurrentUser(currentUser));
+        if (currentUser) {
+          dispatch(setUserId(userId));
+          dispatch(setCurrentUser(currentUser));
+        }
 
         if (_event === "SIGNED_OUT") {
           // redirect back to login page
