@@ -1,6 +1,7 @@
 "use client";
 
-import { logout, setCurrentUser, setUserId } from "@/features/auth/authSlice";
+import { setCurrentUser, setUserId } from "@/features/auth/authSlice";
+import { logoutAsync } from "@/features/auth/authThunks";
 import { getUserById, supabaseClient } from "@/lib/supabase";
 import { AppDispatch } from "@/store";
 import { AuthChangeEvent } from "@supabase/supabase-js";
@@ -16,20 +17,16 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
     const { data } = supabaseClient.auth.onAuthStateChange(
       async (_event: AuthChangeEvent, session) => {
         const userId = session?.user.id as string;
-
         if (!userId) return;
 
         const currentUser = await getUserById(userId);
-
-        console.log("current user:", currentUser);
         if (currentUser) {
           dispatch(setUserId(userId));
           dispatch(setCurrentUser(currentUser));
         }
 
         if (_event === "SIGNED_OUT") {
-          // redirect back to login page
-          dispatch(logout());
+          dispatch(logoutAsync());
           router.push("/login");
         }
       },

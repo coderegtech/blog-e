@@ -86,7 +86,7 @@ export const EditPostModal = () => {
       setImagePreview(selectedPost.image_url as string);
     };
     fetchSelectedPost();
-  }, [selectedPost]);
+  }, [selectedPost, setImagePreview]);
 
   const handleEditPost = async (e: FormEvent) => {
     e.preventDefault();
